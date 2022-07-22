@@ -1,10 +1,14 @@
 # Python
+from datetime import datetime
+import email
 from typing import Optional
 from enum import Enum
 
 # Pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel, PaymentCardNumber
+from pydantic import EmailStr
 from pydantic import Field
+# from email_validator import validate_email, EmailNotValidError
 
 # FastAPI
 from fastapi import FastAPI, Path
@@ -14,6 +18,9 @@ app = FastAPI()
 
 # Models
 
+# class Email(email):
+#     email = EmailStr
+
 class HairColor(Enum):
     white = "white"
     brown = "brown"
@@ -22,9 +29,21 @@ class HairColor(Enum):
     red = "red"
 
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    state: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    country: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
 
 class Person(BaseModel):
     first_name: str = Field(
@@ -44,6 +63,9 @@ class Person(BaseModel):
     )
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
+    email: Optional[EmailStr] = Field(default=None)
+    date: Optional[datetime] = Field(default=None)
+    card: Optional[PaymentCardNumber] = Field(default=None)
 
 @app.get("/")
 def home():
