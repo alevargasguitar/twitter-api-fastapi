@@ -1,6 +1,6 @@
 # Python
 from datetime import datetime
-import email
+from doctest import Example
 from typing import Optional
 from enum import Enum
 
@@ -45,27 +45,53 @@ class Location(BaseModel):
         max_length=50
         )
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "city": "CDMX",
+                "state": "CDMX",
+                "country": "México"
+            }
+        }
+
 class Person(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Alejandro"
         )
     last_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Vargas"
         )
     age: int = Field(
         ...,
         gt=0,
-        le=115
+        le=115,
+        example="25"
     )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
-    email: Optional[EmailStr] = Field(default=None)
-    date: Optional[datetime] = Field(default=None)
-    card: Optional[PaymentCardNumber] = Field(default=None)
+    hair_color: Optional[HairColor] = Field(default=None, example="red")
+    is_married: Optional[bool] = Field(default=None, example=False)
+    email: Optional[EmailStr] = Field(default=None, example="ale@vargas.com")
+    date: Optional[datetime] = Field(default=None, example="2022-07-22T01:59:55")
+    #card: Optional[PaymentCardNumber] = Field(default=None)
+
+    # class Config:
+    #     schema_extra = {
+    #         "example": {
+    #             "first_name": "Facundo",
+    #             "last_name": "García Martoni",
+    #             "age": 20,
+    #             "hair_color": "blonde",
+    #             "is_married": False,
+    #             "email": "facundo@email.com",
+    #             "date": "2022-07-22 01:59:55",
+    #             #"card": "123423453456#5467"
+    #         }
+    #     }
 
 @app.get("/")
 def home():
