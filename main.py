@@ -3,6 +3,7 @@ from datetime import datetime
 from doctest import Example
 from typing import Optional
 from enum import Enum
+import fastapi
 
 # Pydantic
 from pydantic import BaseModel, PaymentCardNumber
@@ -12,6 +13,7 @@ from pydantic import Field
 
 # FastAPI
 from fastapi import FastAPI, Path
+from fastapi import status
 from fastapi import Body, Query, Path
 
 app = FastAPI()
@@ -102,19 +104,29 @@ class Person(PersonBase):
 class PersonOut(PersonBase):
     pass
 
-@app.get("/")
+@app.get(
+    path="/",
+    status_code=status.HTTP_200_OK
+    )
 def home():
     return {"Hello": "World"}
 
 #Request and Response body
 
-@app.post("/person/new", response_model=PersonOut)
+@app.post(
+    path="/person/new",
+    response_model=PersonOut,
+    status_code=status.HTTP_201_CREATED
+    )
 def create_person(person: Person = Body(...)):
     return person
 
 # Validaciones: Query Parameters
 
-@app.get("/person/detail")
+@app.get(
+    path="/person/detail",
+    status_code=status.HTTP_200_OK
+    )
 def show_person(
     name: Optional[str] = Query(
         None,
@@ -134,7 +146,10 @@ def show_person(
     return {name: age}
 
 # Validaciones: Path Parameters
-@app.get("/person/detail{person_id}")
+@app.get(
+    path="/person/detail{person_id}",
+    status_code=status.HTTP_200_OK
+    )
 def show_person(
     person_id: int = Path(
         ...,
@@ -146,7 +161,10 @@ def show_person(
 
 # Validaciones: Request Body
 
-@app.put("/person/{person_id}")
+@app.put(
+    path="/person/{person_id}",
+    status_code=status.HTTP_200_OK
+    )
 def update_person(
     person_id: int = Path(
         ...,
