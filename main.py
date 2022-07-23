@@ -76,6 +76,10 @@ class Person(BaseModel):
     hair_color: Optional[HairColor] = Field(default=None, example="red")
     is_married: Optional[bool] = Field(default=None, example=False)
     email: Optional[EmailStr] = Field(default=None, example="ale@vargas.com")
+    password: str = Field(
+        ...,
+        min_length=8
+        )
     date: Optional[datetime] = Field(default=None, example="2022-07-22T01:59:55")
     #card: Optional[PaymentCardNumber] = Field(default=None)
 
@@ -93,13 +97,38 @@ class Person(BaseModel):
     #         }
     #     }
 
+class PersonOut(BaseModel):
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="Alejandro"
+        )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="Vargas"
+        )
+    age: int = Field(
+        ...,
+        gt=0,
+        le=115,
+        example="25"
+    )
+    hair_color: Optional[HairColor] = Field(default=None, example="red")
+    is_married: Optional[bool] = Field(default=None, example=False)
+    email: Optional[EmailStr] = Field(default=None, example="ale@vargas.com")
+    date: Optional[datetime] = Field(default=None, example="2022-07-22T01:59:55")
+
+
 @app.get("/")
 def home():
     return {"Hello": "World"}
 
 #Request and Response body
 
-@app.post("/person/new")
+@app.post("/person/new", response_model=PersonOut)
 def create_person(person: Person = Body(...)):
     return person
 
