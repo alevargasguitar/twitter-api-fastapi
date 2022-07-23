@@ -111,9 +111,20 @@ class LoginOut(BaseModel):
 @app.get(
     path="/",
     status_code=status.HTTP_200_OK,
-    tags=["Home"]
+    tags=["Home"],
+    summary="Home of the app"
     )
 def home():
+    """
+    Home
+    
+    This path operation show a Hello World
+
+    Parameters:
+    - It doesn't have any parameter
+    
+    Return a string: "Hello World"
+    """
     return {"Hello": "World"}
 
 #Request and Response body
@@ -122,9 +133,21 @@ def home():
     path="/person/new",
     response_model=PersonOut,
     status_code=status.HTTP_201_CREATED,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary="Create Person in the app"
     )
 def create_person(person: Person = Body(...)):
+    """
+    Create Person
+    
+    This path operation create a person in the app and save the information in the database
+
+    Parameters:
+    - Request Body Parameter:
+        - **person: Person** -> A person Model with first name, last name, hair color, age and marital state
+    
+    Return a person model with first name, last name, age, hair color and marital state
+    """
     return person
 
 # Validaciones: Query Parameters
@@ -132,7 +155,8 @@ def create_person(person: Person = Body(...)):
 @app.get(
     path="/person/detail",
     status_code=status.HTTP_200_OK,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary=["Shows Person's detail"]
     )
 def show_person(
     name: Optional[str] = Query(
@@ -145,11 +169,23 @@ def show_person(
         ),
     age: int = Query(
         ...,
-        title="Persona Age",
+        title="Person Age",
         description="This is the person age. Its required",
         example=25
     )
 ):
+    """
+    Show Person
+    
+    This path operation show name and age of the person in the app
+
+    Parameters:
+    - Request Query Parameter:
+        - **name: Optional[str]** -> This is te person name. Its betwen 1 and 50 characters
+        - **age: int** -> This is the person age. Its required
+    
+    Return a person model with first name, last name, age, hair color and marital state
+    """
     return {name: age}
 
 # Validaciones: Path Parameters
@@ -159,7 +195,8 @@ persons = [1, 2, 3, 4, 5]
 @app.get(
     path="/person/detail{person_id}",
     status_code=status.HTTP_200_OK,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary=["GET Person's ID"]
     )
 def show_person(
     person_id: int = Path(
@@ -168,6 +205,17 @@ def show_person(
         example=135
         )
 ):
+    """
+    Show Person
+    
+    This path parameter GET the person's ID
+
+    Parameters:
+    - Request Path Parameter:
+        - **person_id: int** -> It's the person's ID, should be great than 0.
+    
+    Return a person's ID
+    """
     if person_id not in persons:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -180,7 +228,8 @@ def show_person(
 @app.put(
     path="/person/{person_id}",
     status_code=status.HTTP_200_OK,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary={"UPDATE Person´s ID"}
     )
 def update_person(
     person_id: int = Path(
@@ -193,6 +242,17 @@ def update_person(
     person: Person = Body(...),
     Location: Location = Body(...)
 ):
+    """
+    Show Person
+    
+    This path parameter UPDATE the person's ID
+
+    Parameters:
+    - Request Path Parameter:
+        - **person_id: int** -> It's the person's ID, should be great than 0.
+    
+    Return a person's ID and Location
+    """
     results = person.dict()
     results.update(Location.dict())
     return results
