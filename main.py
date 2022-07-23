@@ -1,6 +1,5 @@
 # Python
 from datetime import datetime
-from doctest import Example
 from typing import Optional
 from enum import Enum
 import fastapi
@@ -12,7 +11,7 @@ from pydantic import Field
 # from email_validator import validate_email, EmailNotValidError
 
 # FastAPI
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Form, Path
 from fastapi import status
 from fastapi import Body, Query, Path
 
@@ -104,6 +103,10 @@ class Person(PersonBase):
 class PersonOut(PersonBase):
     pass
 
+class LoginOut(BaseModel):
+    username: str = Field(..., max_length=20, example="miguel2021")
+
+
 @app.get(
     path="/",
     status_code=status.HTTP_200_OK
@@ -179,3 +182,11 @@ def update_person(
     results = person.dict()
     results.update(Location.dict())
     return results
+
+@app.post(
+    path="/login",
+    response_model=LoginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(userame: str = Form(...), password: str = Form(...)):
+    return LoginOut(username=userame)
