@@ -1,5 +1,6 @@
 # Python
 import json
+from unittest import result
 from uuid import UUID
 from datetime import date
 from datetime import datetime
@@ -93,7 +94,7 @@ def signup(user: UserRegister = Body(...)):
     with open("users.json", "r+", encoding="utf-8") as f:
         results = json.loads(f.read())
         user_dict = user.dict()
-        user_dict["user_ID"] = str(user_dict["birth_date"])
+        user_dict["user_ID"] = str(user_dict["user_ID"])
         user_dict["birth_date"] = str(user_dict["birth_date"])
         results.append(user_dict)
         f.seek(0)
@@ -122,7 +123,24 @@ def login():
     )
 
 def show_all_users():
-    pass
+    """
+    Show all users
+
+    This path operations shows all users in the app
+
+    Parameters:
+        -
+    
+    Returns a json list with all users in the app, with the following keys
+        - user_ID: UUID
+        - email: EmailStr
+        - fist_name: str
+        - last_name: str
+        - birth_date: date
+    """
+    with open("users.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        return results
 
 ### Show a user
 @app.get(
