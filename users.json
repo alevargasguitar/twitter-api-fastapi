@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "user_ID": "2022-07-25",
+        "email": "ale@example.com",
+        "first_name": "ale",
+        "last_name": "vargas",
+        "birth_date": "2022-07-25",
+        "password": "alex2021"
+    },
+    {
+        "user_ID": "2022-07-25",
+        "email": "migul@example.com",
+        "first_name": "miguel",
+        "last_name": "torres",
+        "birth_date": "2022-07-25",
+        "password": "holasoymiguel"
+    },
+    {
+        "user_ID": "2022-07-25",
+        "email": "rocio@example.com",
+        "first_name": "rocio",
+        "last_name": "torres",
+        "birth_date": "2022-07-25",
+        "password": "holasoyrocio"
+    }
+]
