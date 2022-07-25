@@ -89,7 +89,8 @@ def signup():
         - last_name: str
         - birth_date: str
     """
-    
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = List[f.read()]
 
 ### Login a user
 @app.post(
